@@ -1,15 +1,33 @@
+# A descriptive name for your workflow, which will be displayed on GitHub
 name: CI Pipeline - Build and Test Docker Image
 
+# The event that triggers this workflow.
+# Here, it runs on every 'push' to any branch.
 on: [push]
 
+# A workflow run is made up of one or more jobs.
 jobs:
-	build_and_test:
-	
-	runs-on: ubuntu-latest
-	
-	steps:
-	-name: Checkout Code
-	uses: actions/checkout@v3
+  # The name of our single job. You can name it anything.
+  build_and_test:
+    # The type of runner the job will run on.
+    # We are using a fresh Ubuntu virtual machine provided by GitHub.
+    runs-on: ubuntu-latest
 
-	-name: Build Docker image
-	run: docker build -t sentiment-api:test
+    # A job is a sequence of steps.
+    steps:
+      # Step 1: Check out your repository's code onto the runner
+      # The 'name' is what you'll see in the GitHub Actions UI logs.
+      - name: Checkout Code
+        # 'uses' specifies that this step will run a pre-built action.
+        # 'actions/checkout@v3' is the official action for checking out a repository.
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Docker Buildx (an advanced Docker build tool)
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      # Step 3: Our actual "test". If the image builds, the dependencies are correct
+      # and the Dockerfile has no syntax errors.
+      - name: Build Docker image
+        # 'run' executes a command-line command on the runner.
+        run: docker build -t sentiment-api:test .
