@@ -1,0 +1,15 @@
+name: CI Pipeline - Build and Test Docker Image
+
+on: [push]
+
+jobs:
+	build_and_test:
+	
+	runs-on: ubuntu-latest
+	
+	steps:
+	-name: Checkout Code
+	uses: actions/checkout@v3
+
+	-name: Build Docker image
+	run: docker build -t sentiment-api:test
